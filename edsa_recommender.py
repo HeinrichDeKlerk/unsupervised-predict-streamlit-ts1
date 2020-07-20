@@ -32,6 +32,8 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
+# Visual dependancies
+from PIL import Image
 # Custom Libraries
 from utils.data_loader import load_movie_titles
 from recommenders.collaborative_based import collab_model
@@ -45,7 +47,7 @@ def main():
 
     # DO NOT REMOVE the 'Recommender System' option below, however,
     # you are welcome to add more options to enrich your app.
-    page_options = ["Recommender System","Solution Overview"]
+    page_options = ["Recommender System","Solution Overview","Exploratory Data Analysis","How a Recommender System Works"]
 
     # -------------------------------------------------------------------
     # ----------- !! THIS CODE MUST NOT BE ALTERED !! -------------------
@@ -106,6 +108,22 @@ def main():
 
     # You may want to add more sections here for aspects such as an EDA,
     # or to provide your business pitch.
+
+
+    # -------------- EDA PAGE -------------------------------------------
+    if page_selection == "Exploratory Data Analysis":
+        st.title("Exploratory Data Aanalysis")
+        st.info("On this page we will Explore the data and relay any insights we have gained from it")
+
+    # -------------- HOW IT WORKS PAGE ----------------------------------
+    if page_selection == "How a Recommender System Works":
+        
+        rec_image = Image.open("resources/imgs/rec_eng_img.jpg.jpeg")
+        st.image(rec_image, use_column_width=True)
+        
+        st.title("How a Recommender System Works")
+        st.info("Here you wil find some simple explanations on how a recommender system works.")
+
 
 
 if __name__ == '__main__':
