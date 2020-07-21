@@ -31,14 +31,17 @@ import streamlit as st
 # Data handling dependencies
 import pandas as pd
 import numpy as np
+from pathlib import Path
 
 # Custom Libraries
 from utils.data_loader import load_movie_titles
 from recommenders.collaborative_based import collab_model
 from recommenders.content_based import content_model
 
+# File path to S3 bucket
+bucket_dir = Path('''../unsupervised_data/unsupervised_movie_data/''')
 # Data Loading
-title_list = load_movie_titles('resources/data/movies.csv')
+title_list = load_movie_titles(bucket_dir/'movies.csv')
 
 # App declaration
 def main():
@@ -103,6 +106,9 @@ def main():
     if page_selection == "Solution Overview":
         st.title("Solution Overview")
         st.write("Describe your winning approach on this page")
+
+        df = pd.read_csv(bucket_dir/'movies.csv')
+        st.write(df.head())
 
     # You may want to add more sections here for aspects such as an EDA,
     # or to provide your business pitch.
