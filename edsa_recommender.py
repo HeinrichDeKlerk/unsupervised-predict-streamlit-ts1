@@ -22,9 +22,15 @@ import streamlit as st
 # Data handling dependencies
 import pandas as pd
 import numpy as np
+from pathlib import Path
 
 # Visual dependancies
+import matplotlib.pyplot as plt
+import seaborn as sns
+import plotly.graph_objects as go
+import plotly.express as px
 from PIL import Image
+
 # Custom Libraries
 from utils.data_loader import load_movie_titles
 from recommenders.collaborative_based import collab_model
@@ -32,6 +38,7 @@ from recommenders.content_based import content_model
 
 # Data Loading
 title_list = load_movie_titles('resources/data/movies.csv')
+s3_path = Path('''../unsupervised_data/unsupervised_movie_data/''')
 
 # App declaration
 def main():
@@ -105,6 +112,31 @@ def main():
     if page_selection == "Exploratory Data Analysis":
         st.title("Exploratory Data Aanalysis")
         st.info("On this page we will Explore the data and relay any insights we have gained from it")
+
+        m_df = pd.read_csv(s3_path/'movies.csv')
+        r_df = pd.read_csv(s3_path/'train.csv')
+
+        st.write(m_df.head())
+        st.write(r_df.head())
+        movie_rate_df = pd.merge(r_df, m_df, on="movieId")
+
+        # correlation matrix
+        fig = plt.figure(figsize = (15, 10))
+        ax = fig.add_subplot()
+        ax.imshow(r_df.corr(), cmap = 'viridis', interpolation='nearest')
+        ax.set_title("Correlation between features")
+        st.pyplot()
+
+        # Rating distribution
+        fig, ax = plt.subplots(figsize=(10,5))
+        graph = sns.countplot(x='rating', data=movie_rate_df, ax=ax)
+        plt.title('Rating distribution')
+        plt.xlabel("Rating")
+        plt.ylabel("Count of Ratings")
+        st.pyplot()
+
+        st.write(np.mean(r_df['rating']))
+
 
     # -------------- HOW IT WORKS PAGE ----------------------------------
     if page_selection == "How a Recommender System Works":
