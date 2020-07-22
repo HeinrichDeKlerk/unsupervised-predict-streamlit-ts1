@@ -22,6 +22,7 @@ import streamlit as st
 # Data handling dependencies
 import pandas as pd
 import numpy as np
+from markdown import markdown
 
 # Visual dependancies
 from PIL import Image
@@ -38,7 +39,7 @@ def main():
 
     # DO NOT REMOVE the 'Recommender System' option below, however,
     # you are welcome to add more options to enrich your app.
-    page_options = ["Recommender System","Solution Overview","Exploratory Data Analysis","How a Recommender System Works"]
+    page_options = ["Recommender System","Data Description","Solution Overview","Exploratory Data Analysis","How a Recommender System Works"]
 
     # -------------------------------------------------------------------
     # ----------- !! THIS CODE MUST NOT BE ALTERED !! -------------------
@@ -105,6 +106,14 @@ def main():
     if page_selection == "Exploratory Data Analysis":
         st.title("Exploratory Data Aanalysis")
         st.info("On this page we will Explore the data and relay any insights we have gained from it")
+
+    # -------------- Data Description Page ------------------------------
+    if page_selection == "Data Description":
+        st.title("Data Description")
+        st.subheader("This recommender makes use of data from the MovieLens recommendation service")
+
+        data_descrip = markdown(open('resources/md_files/movielens_data_descrip.md').read())
+        st.markdown(data_descrip, unsafe_allow_html=True)
 
     # -------------- HOW IT WORKS PAGE ----------------------------------
     if page_selection == "How a Recommender System Works":
