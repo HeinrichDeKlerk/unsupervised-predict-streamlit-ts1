@@ -37,7 +37,6 @@ from surprise import Reader, Dataset
 from surprise import SVD, NormalPredictor, BaselineOnly, KNNBasic, NMF
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import CountVectorizer
-from fuzzywuzzy import fuzz as fz
 
 # Importing data
 movies_df = pd.read_csv('resources/data/movies.csv',sep = ',',delimiter=',')
@@ -156,17 +155,17 @@ def collab_model(movie_list,top_n=10):
         index_3 = pd.DataFrame()
     else:
         index_3  = pd.DataFrame(sims[movie_list[2]])
-        index_3['similarity'] = index_3 [movie_list[2]]
+        index_3['similarity'] = index_3[movie_list[2]]
         index_3 = pd.DataFrame(index_3, columns=['title','similarity'])
 
     similar_list = pd.concat([index_1, index_2, index_3])
               
     if similar_list.empty:
         #SOMETHING WENT WRONG
-        print('Opps!! 404 Something Went Wrong)
+        print('Opps!! 404 Something Went Wrong')
     else:
         r_list = similar_list.sort_values('similarity', ascending=False)
-        r_list = r_list[~(recommended_movies['title'].isin(movie_list))]
+        r_list = r_list[~(r_list['title'].isin(movie_list))]
         r_list = list(r_list[:top_n]['title'])
     return r_list
     
