@@ -122,9 +122,6 @@ def main():
         st.title("Exploratory Data Aanalysis")
         st.info("On this page we will Explore the data and relay any insights we have gained from it")
 
-        data_descrip = markdown(open('resources/md_files/movielens_data_descrip.md').read())
-        st.markdown(data_descrip, unsafe_allow_html=True)
-        
         m_df = pd.read_csv(s3_path/'movies.csv')
         r_df = pd.read_csv(s3_path/'train.csv')
 
