@@ -118,10 +118,10 @@ def main():
     # -------------- HOW IT WORKS PAGE ----------------------------------
     if page_selection == "How a Recommender System Works":
         
+        st.title("How a Recommender System Works")
         rec_image = Image.open("resources/imgs/rec_eng_img.jpg.jpeg")
         st.image(rec_image, use_column_width=True)
         
-        st.title("How a Recommender System Works")
         st.info("Here you wil find some simple explanations on how a recommender system works.")
 
 
