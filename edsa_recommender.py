@@ -123,8 +123,11 @@ def main():
         st.image(rec_image, use_column_width=True)
         
         st.info("Here you wil find some simple explanations on how a recommender system works.")
+        st.markdown("A Recommender System/Engine can suggest items or actions of interest, or in our case, movie recommendations to a user, based on their similarity to other users.<br> By similarity one means how similar one user is to another, based on their likes and dislikes, their demographic information, their preferred genre's, or the rating that they give items.", unsafe_allow_html=True)
+        st.markdown("We chose to mainly focuss on a **Collaborative-Based** Recommender.<br> The recommender system we created is one that will provide movie recommendations to a user(user1), by having them choose 3 movies that they like from a list, and from that choice we calculate their similarity to other users(user2,5 and 6) who also rated those movie's highly.<br> We then see which other movies Users 2, 5 and 6 have rated highly that User 1 has not seen yet, and recommend those to User 1.<br> <img src='https://miro.medium.com/max/2728/1*x8gTiprhLs7zflmEn1UjAQ.png' alt='colab' width='550' height='450'/>", unsafe_allow_html=True)
+        
+        st.markdown("There is also a **Content-Based** Recommender system, which instead of the user ratings, takes into account the content of the films, and how similar that content is to the content of other films, such as: Genre, duration, actors, release year, director, demographics and more.<br> <img src='https://miro.medium.com/max/1642/1*BME1JjIlBEAI9BV5pOO5Mg.png' alt='content' width='400' height='500'/>", unsafe_allow_html=True)
 
-
-
+        st.markdown("The drawback to this method is that it does not always take into account the _'Humanity'_ aspect, where users are likely to belong to more than one 'demographic' into which a Content-Based System creates it's similarities.")
 if __name__ == '__main__':
     main()
