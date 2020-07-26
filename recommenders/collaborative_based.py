@@ -23,14 +23,18 @@ import pandas as pd
 import numpy as np
 import pickle
 import copy
+import scipy as sp
 from surprise import Reader, Dataset
 from surprise import SVD, NormalPredictor, BaselineOnly, KNNBasic, NMF
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import CountVectorizer
+from pathlib import Path
+
+s3_path = Path('''../unsupervised_data/unsupervised_movie_data/''')
 
 # Importing data
-movies_df = pd.read_csv('resources/data/movies.csv',sep = ',',delimiter=',')
-ratings_df = pd.read_csv('resources/data/ratings.csv')
+movies_df = pd.read_csv(s3_path/'movies.csv',sep = ',',delimiter=',')
+ratings_df = pd.read_csv(s3_path/'train.csv', nrows=1000000)
 ratings_df.drop(['timestamp'], axis=1,inplace=True)
 
 # We make use of an SVD model trained on a subset of the MovieLens 10k dataset.
@@ -81,6 +85,7 @@ def pred_movies(movie_list):
         for pred in predictions[:10]:
             id_store.append(pred.uid)
     # Return a list of user id's
+    print(id_store)
     return id_store
 
 # !! DO NOT CHANGE THIS FUNCTION SIGNATURE !!
