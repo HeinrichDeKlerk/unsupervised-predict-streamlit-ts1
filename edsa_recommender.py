@@ -135,13 +135,6 @@ def main():
 
         movie_rate_df = pd.merge(r_df, m_df, on="movieId")
 
-#        # correlation matrix
-#        fig = plt.figure(figsize = (15, 10))
-#        ax = fig.add_subplot()
-#        ax.imshow(r_df.corr(), cmap = 'viridis', interpolation='nearest')
-#        ax.set_title("Correlation between features")
-#        st.pyplot()
-#
         st.markdown('### Correlation between Rating Data')
         corr = r_df.corr()
 
@@ -175,7 +168,14 @@ def main():
         st.pyplot()
 
         st.markdown('Looking at the rating distribution we can see that most Users are generous when rating a Film, with the majority of ratings 3 or more stars')
-        st.write(np.mean(r_df['rating']))
+        
+        most_rate = movie_rate_df.groupby('title').size().sort_values(ascending=False)[:10]
+        most_rate_df = most_rate.reset_index()
+        fig = px.bar(most_rate_df, y='title', x=0,
+                    labels={'title':"Movie Title", 0:'Count'},
+                    color=0)
+        st.plotly_chart(fig)
+
 
         st.markdown("### Pairwise plot of Rating Data")
         pairplot = Image.open('resources/imgs/pairplot.jpg')
