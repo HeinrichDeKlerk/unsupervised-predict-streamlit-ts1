@@ -39,9 +39,9 @@ from recommenders.collaborative_based import collab_model
 from recommenders.content_based import content_model
 
 # File path to S3 bucket
-bucket_dir = Path('''../unsupervised_data/unsupervised_movie_data/''')
+# bucket_dir = Path('''../unsupervised_data/unsupervised_movie_data/''')
 # Data Loading
-title_list = load_movie_titles(bucket_dir/'movies.csv')
+title_list = load_movie_titles('resources/data/movies.csv')
 
 # App declaration
 def main():
@@ -87,9 +87,13 @@ def main():
 
 
         if sys == 'Collaborative Based Filtering':
+           # print('something')
             if st.button("Recommend"):
+            #    print('one')
                 try:
+             #       print('two')
                     with st.spinner('Crunching the numbers...'):
+                        print('three')
                         top_recommendations = collab_model(movie_list=fav_movies,
                                                            top_n=10)
                     st.title("We think you'll like:")
