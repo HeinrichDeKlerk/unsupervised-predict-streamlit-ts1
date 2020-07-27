@@ -125,28 +125,61 @@ def main():
         m_df = pd.read_csv(s3_path/'movies.csv')
         r_df = pd.read_csv(s3_path/'train.csv')
 
+        st.markdown('### Movie information Data') 
         st.write(m_df.head())
+        st.write('The Movie Data has {} rows and {} columns'.format(len(m_df.axes[0]), len(m_df.axes[1])))
+
+        st.markdown('### Rating Data')
         st.write(r_df.head())
+        st.write('The Rating Data has {} rows and {} columns'.format(len(r_df.axes[0]), len(r_df.axes[1])))
+
         movie_rate_df = pd.merge(r_df, m_df, on="movieId")
 
-        # correlation matrix
-        fig = plt.figure(figsize = (15, 10))
-        ax = fig.add_subplot()
-        ax.imshow(r_df.corr(), cmap = 'viridis', interpolation='nearest')
-        ax.set_title("Correlation between features")
+        st.markdown('### Correlation between Rating Data')
+        corr = r_df.corr()
+
+        # create a mask and only show half of the cells 
+        mask = np.zeros_like(corr)
+        mask[np.triu_indices_from(mask)] = True
+        fig, ax = plt.subplots(figsize=(10,5))
+        # plot the data using seaborn
+        graph = sns.heatmap(corr, 
+                         mask = mask, 
+                         vmax = 0.3, 
+                         #square = True,  
+                         cmap = "viridis")
+
+        plt.title("Correlation between features")
         st.pyplot()
+
+        st.markdown('We can see a strong correlation between _timestamp_ and _movieId_.<br> It appears that movies with the lowest ratings last for around 1.5 hours, which implies that the rating users give a film can be dependant on the length of the film.', unsafe_allow_html=True)
 
         # Rating distribution
-        fig, ax = plt.subplots(figsize=(10,5))
-        graph = sns.countplot(x='rating', data=movie_rate_df, ax=ax)
-        plt.title('Rating distribution')
-        plt.xlabel("Rating")
-        plt.ylabel("Count of Ratings")
+        def rat_distplot(df):
+            fig, ax = plt.subplots(figsize=(10,5))
+            graph = sns.countplot(x='rating', data=df, ax=ax)
+            plt.title('Rating distribution')
+            plt.xlabel("Rating")
+            plt.ylabel("Count of Ratings")
+            return
+
+        st.markdown('### Distribution of Ratings')
+        rat_distplot(movie_rate_df)
         st.pyplot()
 
-        st.write(np.mean(r_df['rating']))
+        st.markdown('Looking at the rating distribution we can see that most Users are generous when rating a Film, with the majority of ratings 3 or more stars')
+        
+        most_rate = movie_rate_df.groupby('title').size().sort_values(ascending=False)[:10]
+        most_rate_df = most_rate.reset_index()
+        fig = px.bar(most_rate_df, y='title', x=0,
+                    labels={'title':"Movie Title", 0:'Count'},
+                    color=0)
+        st.plotly_chart(fig)
 
 
+        st.markdown("### Pairwise plot of Rating Data")
+        pairplot = Image.open('resources/imgs/pairplot.jpg')
+        st.image(pairplot, use_column_width=True)
     # -------------- HOW IT WORKS PAGE ----------------------------------
     if page_selection == "How a Recommender System Works":
         
