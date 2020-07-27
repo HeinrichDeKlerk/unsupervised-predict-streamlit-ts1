@@ -1,29 +1,20 @@
 """
-
     Streamlit webserver-based Recommender Engine.
-
     Author: Explore Data Science Academy.
-
     Note:
     ---------------------------------------------------------------------
     Please follow the instructions provided within the README.md file
     located within the root of this repository for guidance on how to use
     this script correctly.
-
     NB: !! Do not remove/modify the code delimited by dashes !!
-
     This application is intended to be partly marked in an automated manner.
     Altering delimited code may result in a mark of 0.
     ---------------------------------------------------------------------
-
     Description: This file is used to launch a minimal streamlit web
 	application. You are expected to extend certain aspects of this script
     and its dependencies as part of your predict project.
-
 	For further help with the Streamlit framework, see:
-
 	https://docs.streamlit.io/en/latest/
-
 """
 # Streamlit dependencies
 import streamlit as st
@@ -31,6 +22,15 @@ import streamlit as st
 # Data handling dependencies
 import pandas as pd
 import numpy as np
+from markdown import markdown
+from pathlib import Path
+
+# Visual dependancies
+import matplotlib.pyplot as plt
+import seaborn as sns
+import plotly.graph_objects as go
+import plotly.express as px
+from PIL import Image
 
 # Visual dependancies
 from PIL import Image
@@ -41,13 +41,15 @@ from recommenders.content_based import content_model
 
 # Data Loading
 title_list = load_movie_titles('resources/data/movies.csv')
+s3_path = Path('''../unsupervised_data/unsupervised_movie_data/''')
 
 # App declaration
 def main():
 
     # DO NOT REMOVE the 'Recommender System' option below, however,
     # you are welcome to add more options to enrich your app.
-    page_options = ["Recommender System","Solution Overview","Exploratory Data Analysis","How a Recommender System Works"]
+
+    page_options = ["Recommender System","Data Description","Solution Overview","Exploratory Data Analysis","How a Recommender System Works"]
 
     # -------------------------------------------------------------------
     # ----------- !! THIS CODE MUST NOT BE ALTERED !! -------------------
@@ -110,18 +112,85 @@ def main():
     # or to provide your business pitch.
 
 
+    # -------------- Data Description Page ------------------------------
+    if page_selection == "Data Description":
+        st.title("Data Description")
+        st.subheader("This recommender makes use of data from the MovieLens recommendation service")
+
+        data_descrip = markdown(open('resources/md_files/movielens_data_descrip.md').read())
+        st.markdown(data_descrip, unsafe_allow_html=True)
+
+
     # -------------- EDA PAGE -------------------------------------------
     if page_selection == "Exploratory Data Analysis":
         st.title("Exploratory Data Aanalysis")
-        st.info("On this page we will Explore the data and relay any insights we have gained from it")
+        st.info("On this page we will Explore the data and relay any insights we have gained from it")        
+        
+        m_df = pd.read_csv(s3_path/'movies.csv')
+        r_df = pd.read_csv(s3_path/'train.csv')
 
+        st.markdown('### Movie information Data') 
+        st.write(m_df.head())
+        st.write('The Movie Data has {} rows and {} columns'.format(len(m_df.axes[0]), len(m_df.axes[1])))
+
+        st.markdown('### Rating Data')
+        st.write(r_df.head())
+        st.write('The Rating Data has {} rows and {} columns'.format(len(r_df.axes[0]), len(r_df.axes[1])))
+
+        movie_rate_df = pd.merge(r_df, m_df, on="movieId")
+
+        st.markdown('### Correlation between Rating Data')
+        corr = r_df.corr()
+
+        # create a mask and only show half of the cells 
+        mask = np.zeros_like(corr)
+        mask[np.triu_indices_from(mask)] = True
+        fig, ax = plt.subplots(figsize=(10,5))
+        # plot the data using seaborn
+        graph = sns.heatmap(corr, 
+                         mask = mask, 
+                         vmax = 0.3, 
+                         #square = True,  
+                         cmap = "viridis")
+
+        plt.title("Correlation between features")
+        st.pyplot()
+
+        st.markdown('We can see a strong correlation between _timestamp_ and _movieId_.<br> It appears that movies with the lowest ratings last for around 1.5 hours, which implies that the rating users give a film can be dependant on the length of the film.', unsafe_allow_html=True)
+
+        # Rating distribution
+        def rat_distplot(df):
+            fig, ax = plt.subplots(figsize=(10,5))
+            graph = sns.countplot(x='rating', data=df, ax=ax)
+            plt.title('Rating distribution')
+            plt.xlabel("Rating")
+            plt.ylabel("Count of Ratings")
+            return
+
+        st.markdown('### Distribution of Ratings')
+        rat_distplot(movie_rate_df)
+        st.pyplot()
+
+        st.markdown('Looking at the rating distribution we can see that most Users are generous when rating a Film, with the majority of ratings 3 or more stars')
+        
+        most_rate = movie_rate_df.groupby('title').size().sort_values(ascending=False)[:10]
+        most_rate_df = most_rate.reset_index()
+        fig = px.bar(most_rate_df, y='title', x=0,
+                    labels={'title':"Movie Title", 0:'Count'},
+                    color=0)
+        st.plotly_chart(fig)
+
+
+        st.markdown("### Pairwise plot of Rating Data")
+        pairplot = Image.open('resources/imgs/pairplot.jpg')
+        st.image(pairplot, use_column_width=True)
     # -------------- HOW IT WORKS PAGE ----------------------------------
     if page_selection == "How a Recommender System Works":
         
-        st.title("How a Recommender System Works")
         rec_image = Image.open("resources/imgs/rec_eng_img.jpg.jpeg")
         st.image(rec_image, use_column_width=True)
         
+        st.title("How a Recommender System Works")
         st.info("Here you wil find some simple explanations on how a recommender system works.")
 
         st.markdown("## What is a Recommender System?")
@@ -134,5 +203,6 @@ def main():
             st.markdown("There is also a **Content-Based** Recommender system, which instead of the user ratings, takes into account the content of the films, and how similar that content is to the content of other films, such as: Genre, duration, actors, release year, director, demographics and more.<br> <img src='https://miro.medium.com/max/1642/1*BME1JjIlBEAI9BV5pOO5Mg.png' alt='content' width='400' height='500'/>", unsafe_allow_html=True)
 
             st.markdown("The drawback to this method is that it does not always take into account the _'Humanity'_ aspect, where users are likely to belong to more than one 'demographic' into which a Content-Based System creates it's similarities.")
+
 if __name__ == '__main__':
     main()
