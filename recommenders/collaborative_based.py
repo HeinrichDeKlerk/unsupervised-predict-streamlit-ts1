@@ -79,6 +79,8 @@ def pred_movies(movie_list):
     # For each movie selected by a user of the app,
     # predict a corresponding user within the dataset with the highest rating
     for i in movie_list:
+        print(i)
+        i = movies_df.loc[(movies_df.title == i), 'movieId'].iloc[0]
         predictions = prediction_item(item_id = i)
         predictions.sort(key=lambda x: x.est, reverse=True)
         # Take the top 10 user id's from each movie with highest rankings
@@ -168,7 +170,7 @@ def collab_model(movie_list,top_n=10):
     top_indexes = np.setdiff1d(top_50_indexes,[idx_1,idx_2,idx_3])
     # Get titles of recommended movies
     final_list = []
-    for i in top_indexes[1:top_n]:
+    for i in top_indexes[:top_n]:
         final_list.append(list(movies_df[movies_df['movieId']==i]['title']))
     # Return list of movies
     print(final_list)
