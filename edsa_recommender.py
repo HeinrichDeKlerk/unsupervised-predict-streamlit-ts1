@@ -159,24 +159,21 @@ def main():
         st.markdown('We can see a strong correlation between _timestamp_ and _movieId_.<br> It appears that movies with the lowest ratings last for around 1.5 hours, which implies that the rating users give a film can be dependant on the length of the film.', unsafe_allow_html=True)
 
         # Rating distribution
-        def rat_distplot(df):
-            fig, ax = plt.subplots(figsize=(10,5))
-            graph = sns.countplot(x='rating', data=df, ax=ax)
-            plt.title('Rating distribution')
-            plt.xlabel("Rating")
-            plt.ylabel("Count of Ratings")
-            return
-
         st.markdown('### Distribution of Ratings')
-        rat_distplot(movie_rate_df)
-        st.pyplot()
+        rate_dist = movie_rate_df.groupby('rating').size()
+        rate_dist_df = rate_dist.reset_index()
+        fig = px.bar(rate_dist_df, y=0, x='rating',
+                    labels={'rating':"Rating", '0':'Count'},
+                    color=0)
+        st.plotly_chart(fig)
 
         st.markdown('Looking at the rating distribution we can see that most Users are generous when rating a Film, with the majority of ratings 3 or more stars')
         
+        st.markdown('### Most rated Movies')
         most_rate = movie_rate_df.groupby('title').size().sort_values(ascending=False)[:10]
         most_rate_df = most_rate.reset_index()
         fig = px.bar(most_rate_df, y='title', x=0,
-                    labels={'title':"Movie Title", 0:'Count'},
+                    labels={'title':"Movie Title", '0':'Count'},
                     color=0)
         st.plotly_chart(fig)
 
