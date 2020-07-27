@@ -38,7 +38,7 @@ ratings_df = pd.read_csv(s3_path/'train.csv', nrows=1000000)
 ratings_df.drop(['timestamp'], axis=1,inplace=True)
 
 # We make use of an SVD model trained on a subset of the MovieLens 10k dataset.
-model=pickle.load(open('resources/models/SVD.pkl', 'rb'))
+model=pickle.load(open('../SVD_model.pkl', 'rb'))
 
 def prediction_item(item_id):
     """Map a given favourite movie to users within the
@@ -53,7 +53,7 @@ def prediction_item(item_id):
         User IDs of users with similar high ratings for the given movie.
     """
     # Data preprosessing
-    reader = Reader(rating_scale=(0, 5))
+    reader = Reader(rating_scale=(0.5, 5))
     load_df = Dataset.load_from_df(ratings_df,reader)
     a_train = load_df.build_full_trainset()
 
