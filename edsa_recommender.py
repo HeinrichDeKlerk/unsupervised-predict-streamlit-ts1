@@ -205,14 +205,27 @@ def main():
 
             st.markdown("The drawback to this method is that it does not always take into account the _'Humanity'_ aspect, where users are likely to belong to more than one 'demographic' into which a Content-Based System creates it's similarities.")
 
-            st.markdown("""
-            Here we chose _Singular Value Decomposition_ (SVD) as our base model (this algorithm was made famous when it was used to win a Netflix Recommender challenge with Collaborative Filtering)\n
-SVD turns our very sparse matrix into a low ranking matrix (reducing the dimensionality) with userID and ItemID or simply known as factors.\n
-We then use this matrix and the SVD Algorithm to predict any missing parts of the matrix, so that each user has a corresponding rating for an Item.\n
-After this, to actually make recommendations to a user we ask them to choose 3 of their favorite movies from a list. Usingtheir choices we then calculate how similar they are to other users who also rated those movies highly. (To accomplish this we used Cosine Similarity to create a similarity matrix and calculated their similar users from this)\n
-We then take the top rated movies from each of the similar users and calculate which top 10 we want to recommend, and return that as our recommendation to the user.
+        st.markdown("## Our approach")
+        st.markdown("""
+            >We chose _Singular Value Decomposition_ (SVD) as our base model (this algorithm was made famous when it was used to win a Netflix Recommender challenge with Collaborative Filtering)\n
+>SVD turns our very sparse matrix into a low ranking matrix (reducing the dimensionality) with userID and ItemID or simply known as factors.\n
+>We then use this matrix and the SVD Algorithm to predict any missing parts of the matrix, so that each user has a corresponding rating for an Item.\n
+>After this, to actually make recommendations to a user we ask them to choose 3 of their favorite movies from a list. Usingtheir choices we then calculate how similar they are to other users who also rated those movies highly. (To accomplish this we used Cosine Similarity to create a similarity matrix and calculated their similar users from this)\n
+>We then take the top rated movies from each of the similar users and calculate which top 10 we want to recommend, and return that as our recommendation to the user.
 
             """)
+        st.markdown("## Final thoughts")
+        st.markdown("""
+        >Why not content based filtering?\n
+>Besides the fact that content based filtering is more resource heavy and having large amounts of data to process therefore taking far longer.\n
+>Humans in general would prefer to watch a movie someone else has seen and with a similar taste to theirs (this being collaborative).\n
+>Consider this, we might all like action movies , but not all action movies are great!\n
+>This is where content based filtering fails, It might recommend a movie because you last watched something similar but only to find you hate that movie or worse you might like both horror and comedy , but content based filtering will most likely only recommend one genre over the other.\n
+>This means that our chosen algorithm might need a larger dataset, however it is more varied, and willl most likely give a range of recommendation.\n
+>As powerful as machine learning is , We learned that in our task of making prediction, what we were actaully doing was predictiong emotions based on past behaviuor of what a user would rate a certain movie.\n
+>That is a very complex task and will never be 100% correct all the time. Humans are complex, and their tastes vary widely, not always conforming into one _Category_.\n
+>This recommender system we built is not only useful in just predictiong movie ratings but a recommender system can be usedin a number of other tasks aswell, like music or book recommendations, Online purchasing websites recommending products for sale or any number of other methods.
+>        """)
 
     st.sidebar.title('About')
     st.sidebar.info(
