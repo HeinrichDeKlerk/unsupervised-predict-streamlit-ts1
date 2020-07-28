@@ -193,6 +193,8 @@ def main():
         st.markdown("### Pairwise plot of Rating Data")
         pairplot = Image.open('resources/imgs/pairplot.jpg')
         st.image(pairplot, use_column_width=True)
+	st.markdown('Most plots here do not show anything of value except the final bottom right one.<br> This shows a very clear correlation between the movie length and ratings.',unsafe_allow_html=True)
+	st.markdown('Movies that are longer than average seem to get lower reviews than shorter movies, which can give some insight into how most people view movie length.')
     # -------------- HOW IT WORKS PAGE ----------------------------------
     if page_selection == "How a Recommender System Works":
         
