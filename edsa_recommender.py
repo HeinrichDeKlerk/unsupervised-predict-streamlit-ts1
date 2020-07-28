@@ -52,12 +52,11 @@ def main():
         ## **Pages**\n
         * Recommender System\n
         * Data Description\n
-        * Solution Overview\n
         * Exploratory Data Analysis\n
         * How a Recommender System Works\n
         ## Choose a page in the selectbox below:
         ''')
-    page_options = ["Recommender System","Data Description","Solution Overview","Exploratory Data Analysis","How a Recommender System Works"]
+    page_options = ["Recommender System","Data Description","Exploratory Data Analysis","How a Recommender System Works"]
 
 
     # -------------------------------------------------------------------
@@ -113,15 +112,6 @@ def main():
     # -------------------------------------------------------------------
 
     # ------------- SAFE FOR ALTERING/EXTENSION -------------------------
-
-    # ------------- Solution Overview Page ------------------------------
-    if page_selection == "Solution Overview":
-        st.title("Solution Overview")
-        st.write("Describe your winning approach on this page")
-
-    # You may want to add more sections here for aspects such as an EDA,
-    # or to provide your business pitch.
-
 
     # -------------- Data Description Page ------------------------------
     if page_selection == "Data Description":
