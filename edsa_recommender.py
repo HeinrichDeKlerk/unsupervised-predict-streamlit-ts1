@@ -1,13 +1,12 @@
+
 """
     Streamlit webserver-based Recommender Engine.
     Author: Explore Data Science Academy.
-
     Note:
     ---------------------------------------------------------------------
     Please follow the instructions provided within the README.md file
     located within the root of this repository for guidance on how to use
     this script correctly.
-
     NB: !! Do not remove/modify the code delimited by dashes !!
     This application is intended to be partly marked in an automated manner.
     Altering delimited code may result in a mark of 0.
@@ -17,7 +16,6 @@
     and its dependencies as part of your predict project.
 	For further help with the Streamlit framework, see:
 	https://docs.streamlit.io/en/latest/
-
 """
 # Streamlit dependencies
 import streamlit as st
@@ -25,7 +23,6 @@ import streamlit as st
 # Data handling dependencies
 import pandas as pd
 import numpy as np
-
 from markdown import markdown
 from pathlib import Path
 
@@ -45,14 +42,23 @@ from recommenders.content_based import content_model
 title_list = load_movie_titles('resources/data/movies.csv')
 s3_path = Path('''../unsupervised_data/unsupervised_movie_data/''')
 
-
 # App declaration
 def main():
 
     # DO NOT REMOVE the 'Recommender System' option below, however,
     # you are welcome to add more options to enrich your app.
-
+    st.sidebar.title('Movie Recommender App')
+    st.sidebar.markdown('''
+        ## **Pages**\n
+        * Recommender System\n
+        * Data Description\n
+        * Solution Overview\n
+        * Exploratory Data Analysis\n
+        * How a Recommender System Works\n
+        ## Choose a page in the selectbox below:
+        ''')
     page_options = ["Recommender System","Data Description","Solution Overview","Exploratory Data Analysis","How a Recommender System Works"]
+
 
     # -------------------------------------------------------------------
     # ----------- !! THIS CODE MUST NOT BE ALTERED !! -------------------
@@ -106,7 +112,9 @@ def main():
 
     # -------------------------------------------------------------------
 
-    # ------------- SAFE FOR ALTERING/EXTENSION -------------------
+    # ------------- SAFE FOR ALTERING/EXTENSION -------------------------
+
+    # ------------- Solution Overview Page ------------------------------
     if page_selection == "Solution Overview":
         st.title("Solution Overview")
         st.write("Describe your winning approach on this page")
@@ -123,12 +131,11 @@ def main():
         data_descrip = markdown(open('resources/md_files/movielens_data_descrip.md').read())
         st.markdown(data_descrip, unsafe_allow_html=True)
 
-
     # -------------- EDA PAGE -------------------------------------------
     if page_selection == "Exploratory Data Analysis":
         st.title("Exploratory Data Aanalysis")
-        st.info("On this page we will Explore the data and relay any insights we have gained from it")        
-        
+        st.info("On this page we will Explore the data and relay any insights we have gained from it")
+
         m_df = pd.read_csv(s3_path/'movies.csv')
         r_df = pd.read_csv(s3_path/'train.csv')
 
@@ -161,7 +168,7 @@ def main():
 
         st.markdown('We can see a strong correlation between _timestamp_ and _movieId_.<br> It appears that movies with the lowest ratings last for around 1.5 hours, which implies that the rating users give a film can be dependant on the length of the film.', unsafe_allow_html=True)
 
-        # Rating distribution
+       # Rating distribution
         st.markdown('### Distribution of Ratings')
         rate_dist = movie_rate_df.groupby('rating').size()
         rate_dist_df = rate_dist.reset_index()
@@ -172,11 +179,13 @@ def main():
 
         st.markdown('Looking at the rating distribution we can see that most Users are generous when rating a Film, with the majority of ratings 3 or more stars')
         
-        st.markdown('### Most rated Movies')
+
+        st.markdown('Looking at the rating distribution we can see that most Users are generous when rating a Film, with the majority of ratings 3 or more stars')
+        
         most_rate = movie_rate_df.groupby('title').size().sort_values(ascending=False)[:10]
         most_rate_df = most_rate.reset_index()
         fig = px.bar(most_rate_df, y='title', x=0,
-                    labels={'title':"Movie Title", '0':'Count'},
+                    labels={'title':"Movie Title", 0:'Count'},
                     color=0)
         st.plotly_chart(fig)
 
@@ -184,6 +193,8 @@ def main():
         st.markdown("### Pairwise plot of Rating Data")
         pairplot = Image.open('resources/imgs/pairplot.jpg')
         st.image(pairplot, use_column_width=True)
+	st.markdown('Most plots here do not show anything of value except the final bottom right one.<br> This shows a very clear correlation between the movie length and ratings.',unsafe_allow_html=True)
+	st.markdown('Movies that are longer than average seem to get lower reviews than shorter movies, which can give some insight into how most people view movie length.')
     # -------------- HOW IT WORKS PAGE ----------------------------------
     if page_selection == "How a Recommender System Works":
         
@@ -203,6 +214,24 @@ def main():
             st.markdown("There is also a **Content-Based** Recommender system, which instead of the user ratings, takes into account the content of the films, and how similar that content is to the content of other films, such as: Genre, duration, actors, release year, director, demographics and more.<br> <img src='https://miro.medium.com/max/1642/1*BME1JjIlBEAI9BV5pOO5Mg.png' alt='content' width='400' height='500'/>", unsafe_allow_html=True)
 
             st.markdown("The drawback to this method is that it does not always take into account the _'Humanity'_ aspect, where users are likely to belong to more than one 'demographic' into which a Content-Based System creates it's similarities.")
+
+
+    st.sidebar.title('About')
+    st.sidebar.info(
+            """
+            This App is maintained by EDSA students. It serves as a project for
+            an unsupervised learning sprint, by deploying a recommender engine.
+
+            **Authors:**\n
+            Heinrich de Klerk\n
+            Michael Ilic\n
+            Rolivhuwa Malise\n
+            Rirhandzu Mahlaule\n
+            Nceba Mandlana\n
+            Siyabonga Mtshemla\n
+
+    """
+        )
 
 if __name__ == '__main__':
     main()
