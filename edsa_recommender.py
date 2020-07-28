@@ -1,11 +1,13 @@
 """
     Streamlit webserver-based Recommender Engine.
     Author: Explore Data Science Academy.
+
     Note:
     ---------------------------------------------------------------------
     Please follow the instructions provided within the README.md file
     located within the root of this repository for guidance on how to use
     this script correctly.
+
     NB: !! Do not remove/modify the code delimited by dashes !!
     This application is intended to be partly marked in an automated manner.
     Altering delimited code may result in a mark of 0.
@@ -15,6 +17,7 @@
     and its dependencies as part of your predict project.
 	For further help with the Streamlit framework, see:
 	https://docs.streamlit.io/en/latest/
+
 """
 # Streamlit dependencies
 import streamlit as st
@@ -22,6 +25,7 @@ import streamlit as st
 # Data handling dependencies
 import pandas as pd
 import numpy as np
+
 from markdown import markdown
 from pathlib import Path
 
@@ -32,8 +36,6 @@ import plotly.graph_objects as go
 import plotly.express as px
 from PIL import Image
 
-# Visual dependancies
-from PIL import Image
 # Custom Libraries
 from utils.data_loader import load_movie_titles
 from recommenders.collaborative_based import collab_model
@@ -42,6 +44,7 @@ from recommenders.content_based import content_model
 # Data Loading
 title_list = load_movie_titles('resources/data/movies.csv')
 s3_path = Path('''../unsupervised_data/unsupervised_movie_data/''')
+
 
 # App declaration
 def main():
