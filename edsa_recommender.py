@@ -46,7 +46,18 @@ def main():
 
     # DO NOT REMOVE the 'Recommender System' option below, however,
     # you are welcome to add more options to enrich your app.
+    st.sidebar.title('Movie Recommender App')
+    st.sidebar.markdown('''
+        ## **Pages**\n
+        * Recommender System\n
+        * Data Description\n
+        * Solution Overview\n
+        * Exploratory Data Analysis\n
+        * How a Recommender System Works\n
+        ## Choose a page in the selectbox below:
+        ''')
     page_options = ["Recommender System","Data Description","Solution Overview","Exploratory Data Analysis","How a Recommender System Works"]
+
 
     # -------------------------------------------------------------------
     # ----------- !! THIS CODE MUST NOT BE ALTERED !! -------------------
@@ -100,7 +111,9 @@ def main():
 
     # -------------------------------------------------------------------
 
-    # ------------- SAFE FOR ALTERING/EXTENSION -------------------
+    # ------------- SAFE FOR ALTERING/EXTENSION -------------------------
+
+    # ------------- Solution Overview Page ------------------------------
     if page_selection == "Solution Overview":
         st.title("Solution Overview")
         st.write("Describe your winning approach on this page")
@@ -190,6 +203,22 @@ def main():
         st.info("Here you wil find some simple explanations on how a recommender system works.")
 
 
+    st.sidebar.title('About')
+    st.sidebar.info(
+            """
+            This App is maintained by EDSA students. It serves as a project for
+            an unsupervised learning sprint, by deploying a recommender engine.
+
+            **Authors:**\n
+            Heinrich de Klerk\n
+            Michael Ilic\n
+            Rolivhuwa Malise\n
+            Rirhandzu Mahlaule\n
+            Nceba Mandlana\n
+            Siyabonga Mtshemla\n
+
+    """
+        )
 
 if __name__ == '__main__':
     main()
