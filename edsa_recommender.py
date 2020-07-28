@@ -12,10 +12,10 @@
     Altering delimited code may result in a mark of 0.
     ---------------------------------------------------------------------
     Description: This file is used to launch a minimal streamlit web
-	application. You are expected to extend certain aspects of this script
+        application. You are expected to extend certain aspects of this script
     and its dependencies as part of your predict project.
-	For further help with the Streamlit framework, see:
-	https://docs.streamlit.io/en/latest/
+        For further help with the Streamlit framework, see:
+        https://docs.streamlit.io/en/latest/
 """
 # Streamlit dependencies
 import streamlit as st
@@ -183,8 +183,8 @@ def main():
         st.markdown("### Pairwise plot of Rating Data")
         pairplot = Image.open('resources/imgs/pairplot.jpg')
         st.image(pairplot, use_column_width=True)
-	st.markdown('Most plots here do not show anything of value except the final bottom right one.<br> This shows a very clear correlation between the movie length and ratings.',unsafe_allow_html=True)
-	st.markdown('Movies that are longer than average seem to get lower reviews than shorter movies, which can give some insight into how most people view movie length.')
+        st.markdown('Most plots here do not show anything of value except the final bottom right one.<br> This shows a very clear correlation between the movie length and ratings.',unsafe_allow_html=True)
+        st.markdown('Movies that are longer than average seem to get lower reviews than shorter movies, which can give some insight into how most people view movie length.')
     # -------------- HOW IT WORKS PAGE ----------------------------------
     if page_selection == "How a Recommender System Works":
         
@@ -205,6 +205,14 @@ def main():
 
             st.markdown("The drawback to this method is that it does not always take into account the _'Humanity'_ aspect, where users are likely to belong to more than one 'demographic' into which a Content-Based System creates it's similarities.")
 
+            st.markdown("""
+            Here we chose _Singular Value Decomposition_ (SVD) as our base model (this algorithm was made famous when it was used to win a Netflix Recommender challenge with Collaborative Filtering)\n
+SVD turns our very sparse matrix into a low ranking matrix (reducing the dimensionality) with userID and ItemID or simply known as factors.\n
+We then use this matrix and the SVD Algorithm to predict any missing parts of the matrix, so that each user has a corresponding rating for an Item.\n
+After this, to actually make recommendations to a user we ask them to choose 3 of their favorite movies from a list. Usingtheir choices we then calculate how similar they are to other users who also rated those movies highly. (To accomplish this we used Cosine Similarity to create a similarity matrix and calculated their similar users from this)\n
+We then take the top rated movies from each of the similar users and calculate which top 10 we want to recommend, and return that as our recommendation to the user.
+
+            """)
 
     st.sidebar.title('About')
     st.sidebar.info(
